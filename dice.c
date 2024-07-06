@@ -1,10 +1,11 @@
+#include <datetime/datetime.h>
+#include <dolphin/dolphin.h>
 #include <furi.h>
 #include <furi_hal.h>
 #include "furi_hal_random.h"
 #include <gui/elements.h>
 #include <gui/gui.h>
 #include <input/input.h>
-#include <dolphin/dolphin.h>
 #include "dice_rm_icons.h"
 
 #if __has_include(<cfw/cfw.h>)
@@ -51,8 +52,9 @@ static uint16_t unbiased_rand(uint16_t max) {
     return 1 + x % max;
 }
 
-static void dice_input_callback(InputEvent* input_event, FuriMessageQueue* event_queue) {
-    furi_assert(event_queue);
+static void dice_input_callback(InputEvent* input_event, void* ctx) {
+    furi_assert(ctx);
+    FuriMessageQueue* event_queue = ctx;
     PluginEvent event = {.type = EventTypeKey, .input = *input_event};
     furi_message_queue_put(event_queue, &event, FuriWaitForever);
 }
